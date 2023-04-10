@@ -76,8 +76,8 @@ class Othello:
         return False
                     
     #algoritms prieks heiristiskā novērtējuma iegūšanas gājienam, tiek izmantots alfa-beta algoritms
-    def alphabeta(self, depth, maximizing_player, alpha=-float('inf'), beta=float('inf')):
-        print(depth)
+    def alphabeta(self, maximizing_player, alpha=-float('inf'), beta=float('inf')):
+        depth = 0
         if self.aiTurn == 'W':
             value = self.get_score()[1] - self.get_score()[0]
         else:
@@ -93,7 +93,7 @@ class Othello:
                 for j in range(8):
                     if self.is_valid_move(i, j):
                         self.make_move(i, j)
-                        val = max(val, self.alphabeta(depth-1, False, alpha, beta))
+                        val = max(val, self.alphabeta(depth+1, False, alpha, beta))
                         alpha = max(alpha, val)
                         #beta nogriešana
                         if val >= beta:
@@ -107,7 +107,7 @@ class Othello:
                 for j in range(8):
                     if self.is_valid_move(i, j):
                         self.make_move(i, j)
-                        val = min(val, self.alphabeta(depth-1, True, alpha, beta))
+                        val = min(val, self.alphabeta(depth+1, True, alpha, beta))
                         beta = min(beta, val)
                         #alfa nogriešana
                         if val <= alpha:
@@ -122,8 +122,8 @@ class Othello:
             for j in range(8) :
                 if self.is_valid_move(i, j): 
                     self.make_move(i, j)
-                    #izsaukts alfa-beta algoritms, ar noteiktu dziļumu un maksimizāciju
-                    val = self.alphabeta(10, True)
+                    #izsaukts alfa-beta algoritms ar maksimizāciju
+                    val = self.alphabeta(True)
                     self.board = copy.deepcopy(self.savedBoard)
                     if (val > bestVal) :                
                         bestMove = (i, j)
@@ -202,7 +202,7 @@ class Othello:
             label.pack()
             restartBtn.pack()
             exitBtn.pack()
-            gameover_window.geometry(f'{width}x{height}+{center_x}+{center_y}')
+            gameover_window.geometry(f'{width-250}x{height-250}+{center_x}+{center_y}')
 
         #galvenais spēles logs
         window = tk.Tk()
